@@ -6,7 +6,7 @@
 ## How to navigate this project
 - All the code is in _BMICalculator/bmi_calculator/src/main.rs_
 - To run code:
- - Download file [link](https://github.com/TurnTheKeys/BMICalculator/blob/main/bmi_calculator/target/debug/bmi_waist.exe), and navigate to it through cmd
+ - Download file [link](https://github.com/TurnTheKeys/BMICalculator/blob/main/bmi_calculator/target/debug/) called bmi_waist.exe, and navigate to it through cmd
  - Navigate to the file using cmd (on windows)
  - Type in '.\bmi_waist.exe' to run code
 
