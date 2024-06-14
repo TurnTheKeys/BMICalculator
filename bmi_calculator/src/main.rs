@@ -4,7 +4,8 @@ fn main() {
     println!("Hello, this program will calculate your bmi based on given height and weight!");
     println!("=== Height measurements ===");
     println!("Please specify if you are centimeters (cm) or inches (in)");
-    let mut given_height_type: String = String::new();
+    
+    let mut given_height_type:  = String::new();
     io::stdin().read_line(&mut given_height_type).expect("Value was unexpected");
 
     println!("Please specify your measurement in that type");
@@ -54,6 +55,33 @@ fn weight_conversion (measurement_type: String, measurement: f32) -> f32{
             return 0.0;
         }
     }
+}
+
+fn get_measurement( measurement_type: &str , valid_units: &[&str]) -> (string, f32) {
+    let mut input_unit: String = String:: new();
+    loop{
+        println!("Please specify your {} in either {} or {}", measurement_type, valid_units[0], valid_units[1]);
+        io::stdin().read_line(&mut input_unit).expect("Failed to read line");
+        input_unit = input_unit.trim().to_string();
+        if valid_units.contains(&&input_unit.as_str()){
+            println!("Your chosen unit is: {}", input_unit);
+            break;
+        }
+        else{
+            println!("You specified {}, which was not an option. Try again.", input_unit)
+        }
+    }
+
+    let mut input_value = String::new();
+    println!("Please provide your {} measurement in {}", measurement_type, input_unit);
+    io::stdin().read_line(&mut input_value).expect("Value could not be read");
+    let input_value: f32 = match input_value.trim().parse(){
+        Ok(v)=> v,
+        Err(_) => {
+            println!("This number cannot be used! You are now using 100.00");
+            100.00
+        }
+    };
 }
 
 //Converts measurement in cm
