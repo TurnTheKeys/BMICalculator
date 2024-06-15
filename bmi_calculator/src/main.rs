@@ -8,46 +8,14 @@ fn main() {
     let height = get_measurement("height", &["cm", "in"]);
     let height_cm: f32 = convert_height_to_cm (height.0, height.1);
 
-    println!("");
-    println!("=== Weight measurements ===");
-    println!("Please specify if you are measuring in kilograms (kg) or in pounds (ib)");
-    let mut given_weight_type: String = String::new();
-    io::stdin().read_line(&mut given_weight_type).expect("Value was unexpected");
-
-    println!("Please specify your measurement in that type");
-    let mut given_weight_value: String = String::new();
-    io::stdin().read_line(&mut given_weight_value).expect("Value was unexpected");
-    
-    let converted_weight_kg:f32 = weight_conversion(given_weight_type, string_to_f32(given_weight_value));
+    let weight = get_measurement("weight", &["kg", "ib"]);
+    let weight_kg: f32 = convert_weight_to_kg (weight.0, weight.1);
 
     println!("");
     println!("=== BMI Calculation ===");
-    let bmi: f32 = bmi_calculation(height_cm, converted_weight_kg);
+    let bmi: f32 = bmi_calculation(height_cm, weight_kg);
     println!("Your bmi is: {}", bmi);
     bmi_categories(bmi);
-}
-
-
-//Convert from string to f32
-fn string_to_f32 (string_value: String) -> f32{
-    string_value.trim().parse().unwrap()
-}
-
-//Converts weight to kg
-fn weight_conversion (measurement_type: String, measurement: f32) -> f32{
-    let measurement_type_isolated: &str = measurement_type.trim();
-    match measurement_type_isolated{
-        "ib" => {
-            return measurement * 0.4535; 
-        },
-        "kg" => {
-            return measurement;
-        }
-        _ => {
-            println!("Invalid selection");
-            return 0.0;
-        }
-    }
 }
 
 fn get_measurement( measurement_type: &str , valid_units: &[&str]) -> (String, f32) {
@@ -97,6 +65,20 @@ fn convert_height_to_cm(unit: String, height: f32) -> f32{
     }
 }
 
+//Converts measurement in cm
+fn convert_weight_to_kg(unit: String, weight: f32) -> f32{
+    match unit.as_str(){
+        "kg" =>{
+            return weight;
+        }
+        "ib" =>{
+            return weight * 2.54;
+        }
+        _ =>{
+            return 0.00;
+        }
+    }
+}
 
 // Calculates BMI value
 fn bmi_calculation (height_cm: f32, weight_kg: f32) -> f32{
