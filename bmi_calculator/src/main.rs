@@ -4,16 +4,9 @@ fn main() {
     println!("Hello, this program will calculate your bmi based on given height and weight!");
     println!("=== Height measurements ===");
     println!("Please specify if you are centimeters (cm) or inches (in)");
-    
-    let mut given_height_type:  = String::new();
-    io::stdin().read_line(&mut given_height_type).expect("Value was unexpected");
 
-    println!("Please specify your measurement in that type");
-    let mut given_height_value: String = String::new();
-    io::stdin().read_line(&mut given_height_value).expect("Value was unexpected");
-
-    
-    let converted_height_cm: f32 = height_conversion(given_height_type, string_to_f32(given_height_value));
+    let height = get_measurement("height", &["cm", "in"]);
+    let height_cm: f32 = convert_height_to_cm (height.0, height.1);
 
     println!("");
     println!("=== Weight measurements ===");
@@ -29,7 +22,7 @@ fn main() {
 
     println!("");
     println!("=== BMI Calculation ===");
-    let bmi: f32 = bmi_calculation(converted_height_cm, converted_weight_kg);
+    let bmi: f32 = bmi_calculation(height_cm, converted_weight_kg);
     println!("Your bmi is: {}", bmi);
     bmi_categories(bmi);
 }
@@ -57,7 +50,10 @@ fn weight_conversion (measurement_type: String, measurement: f32) -> f32{
     }
 }
 
-fn get_measurement( measurement_type: &str , valid_units: &[&str]) -> (string, f32) {
+fn get_measurement( measurement_type: &str , valid_units: &[&str]) -> (String, f32) {
+    println!("");
+    println!("==== {} measurement ====", measurement_type);
+
     let mut input_unit: String = String:: new();
     loop{
         println!("Please specify your {} in either {} or {}", measurement_type, valid_units[0], valid_units[1]);
@@ -73,6 +69,7 @@ fn get_measurement( measurement_type: &str , valid_units: &[&str]) -> (string, f
     }
 
     let mut input_value = String::new();
+    println!("");
     println!("Please provide your {} measurement in {}", measurement_type, input_unit);
     io::stdin().read_line(&mut input_value).expect("Value could not be read");
     let input_value: f32 = match input_value.trim().parse(){
@@ -82,24 +79,24 @@ fn get_measurement( measurement_type: &str , valid_units: &[&str]) -> (string, f
             100.00
         }
     };
+    (input_unit,input_value)
 }
 
 //Converts measurement in cm
-fn height_conversion (measurement_type: String, measurement: f32) -> f32{
-    let measurement_type_isolated: &str = measurement_type.trim();
-    match measurement_type_isolated{
-        "in" => {
-            return measurement * 2.54; 
-        },
-        "cm" => {
-            return measurement;
+fn convert_height_to_cm(unit: String, height: f32) -> f32{
+    match unit.as_str(){
+        "cm" =>{
+            return height;
         }
-        _ => {
-            println!("Invalid selection");
-            return 0.0;
+        "in" =>{
+            return height * 2.54;
+        }
+        _ =>{
+            return 0.00;
         }
     }
 }
+
 
 // Calculates BMI value
 fn bmi_calculation (height_cm: f32, weight_kg: f32) -> f32{
